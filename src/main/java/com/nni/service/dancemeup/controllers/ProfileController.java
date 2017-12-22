@@ -1,4 +1,4 @@
-package com.nni.service.dancemeup.comtrollers;
+package com.nni.service.dancemeup.controllers;
 
 import com.nni.service.dancemeup.entities.Profile;
 import com.nni.service.dancemeup.exceptions.UserNotFoundException;
@@ -22,7 +22,7 @@ import java.util.Collection;
  */
 
 @RestController
-@RequestMapping("/api/profiles")
+@RequestMapping("/api")
 public class ProfileController {
 
     private final ProfileRepository profileRepository;
@@ -35,18 +35,18 @@ public class ProfileController {
         this.userRepository = userRepository;
     }
 
-//    @RequestMapping(method = RequestMethod.GET)
-//    Profile getProfile(@PathVariable String userId){
-//        this.validateUser(userId);
-//        return this.profileRepository.findByUsername(userId);
-//    }
+    @RequestMapping(method = RequestMethod.GET, value = "/profile")
+    Profile getProfile(@PathVariable String userId){
+        this.validateUser(userId);
+        return this.profileRepository.findByUsername(userId);
+    }
     
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value = "/profiles")
     Collection<Profile> getProfiles(){
         return this.profileRepository.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, value = "/profile")
     ResponseEntity<Profile> add(@RequestBody Profile profile){
 
         Profile result = profileRepository.save(new Profile("", profile.getEmail()));
