@@ -6,6 +6,11 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by magma on 12/21/2017.
@@ -20,11 +25,13 @@ public class Event {
 
     private String name;
 
-    private Set<Profile> attendies = new HashSet<Profile>();
+    @JsonIgnore
+    @ManyToMany()
+    private Set<Profile> profiles = new HashSet<Profile>();
 
-    private Location location;
+    private String location;
 
-    private Profile creator;
+    private String creator;
 
     private String openTo;
 

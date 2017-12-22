@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Collection;
 
 /**
  * Created by magma on 12/22/2017.
@@ -34,17 +35,21 @@ public class ProfileController {
         this.userRepository = userRepository;
     }
 
+//    @RequestMapping(method = RequestMethod.GET)
+//    Profile getProfile(@PathVariable String userId){
+//        this.validateUser(userId);
+//        return this.profileRepository.findByUsername(userId);
+//    }
+    
     @RequestMapping(method = RequestMethod.GET)
-    Profile getProfile(@PathVariable String userId){
-        this.validateUser(userId);
-        return this.profileRepository.findByUsername(userId);
+    Collection<Profile> getProfiles(){
+        return this.profileRepository.findAll();
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<Profile> add(@PathVariable String userId,
-                                @RequestBody String email){
+    ResponseEntity<Profile> add(@RequestBody Profile profile){
 
-        Profile result = profileRepository.save(new Profile(userId, email));
+        Profile result = profileRepository.save(new Profile("", profile.getEmail()));
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")

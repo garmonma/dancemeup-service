@@ -1,8 +1,14 @@
 package com.nni.service.dancemeup.entities;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by magma on 12/21/2017.
@@ -24,18 +30,20 @@ public class Profile {
 
     private String lastName;
 
-
-
-    private Location location;
+    private String location;
 
     private String aboutMe;
 
     private String photo;
 
-    private Status danceStatus;
+    private String danceStatus;
+    
+    @JsonIgnore
+    @ManyToMany(mappedBy = "profiles")
+    private Set<Event> events = new HashSet<Event>();
 
-    public String getId(){
-        return this.getId();
+    public Long getId(){
+        return Id;
     }
 
     public String getEmail(){
@@ -58,7 +66,7 @@ public class Profile {
         return this.photo;
     }
 
-    public Status getDanceStatus(){
+    public String getDanceStatus(){
         return this.danceStatus;
     }
 
@@ -72,7 +80,7 @@ public class Profile {
     }
 
     public Profile(String username, String email){
-        this.email = getEmail();
+        this.email = email;
     }
 
     public Profile(){
