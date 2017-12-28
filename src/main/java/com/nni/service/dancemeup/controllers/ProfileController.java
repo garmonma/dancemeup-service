@@ -7,14 +7,13 @@ import com.nni.service.dancemeup.repositories.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.Collection;
 
 /**
@@ -23,6 +22,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class ProfileController {
 
     private final ProfileRepository profileRepository;
@@ -38,7 +38,7 @@ public class ProfileController {
     @RequestMapping(method = RequestMethod.GET, value = "/profile")
     Profile getProfile(@PathVariable String userId){
         this.validateUser(userId);
-        return this.profileRepository.findByUsername(userId);
+        return this.profileRepository.findByNickname(userId);
     }
     
     @RequestMapping(method = RequestMethod.GET, value = "/profiles")
@@ -47,17 +47,22 @@ public class ProfileController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/profile")
-    ResponseEntity<Profile> add(@RequestBody Profile profile){
+    Profile add(@RequestBody Profile profile){
 
-        Profile result = profileRepository.save(new Profile("", profile.getEmail()));
+    	System.out.println(profile);
+    	
+        Profile result = profileRepository.save(profile);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(result.getId()).toUri();
-
-        return ResponseEntity.created(location).build();
+        return result;
     }
+    
+    @RequestMapping(method = RequestMethod.PUT, value = "/profile")
+    Profile update(@RequestBody Profile profile){
+    	System.out.println("Update Profile : " + profile);
 
+    	Profile result= profileRepository.save(profile);
+        return result;
+    }
 
     private void validateUser(String userId) {
         if(this.userRepository.findByUsername(userId) == null) {
